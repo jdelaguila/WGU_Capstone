@@ -1,0 +1,6 @@
+streamlit
+sklearn
+pandas
+seaborn
+predict_page
+explore_page
