@@ -3,5 +3,3 @@ sklearn
 pandas
 seaborn
 numpy
-predict_page
-explore_page
