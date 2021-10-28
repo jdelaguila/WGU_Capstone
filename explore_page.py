@@ -3,18 +3,21 @@ import pandas as pd
 import seaborn as sns
 from predict_page import show_predict_page
 
+# change condition to readable display
 def clean_condition(x):
     if x == 0:
         return "No heart disease"
     else:
         return "Heart disease"
 
+# change sex to readable display
 def clean_sex(x):
     if x == 0:
         return "Female"
     else:
         return "Male"
 
+# change chest pain to readable display
 def clean_chest_pain(x):
     if x == 0:
         return "Typical angina"
@@ -25,12 +28,14 @@ def clean_chest_pain(x):
     else:
         return "Asymptomatic"
 
+# change blood sugar to readable display
 def clean_blood_sugar(x):
     if x == 0:
         return 'Greater than or equal to 120 mg/dl'
     else:
         return 'Less than 120 mg/dl'
 
+# change electrocardiographic results to readable display
 def clean_ecg(x):
     if x == 0:
         return 'Normal'
@@ -39,19 +44,23 @@ def clean_ecg(x):
     else:
         return 'showing probable or definite left ventricular hypertrophy by Estes\' criteria'
 
+# change exercise induced angina to readable display
 def clean_exang(x):
     if x == 0:
         return 'no'
     else:
         return 'yes'
 
+# change the slope of the peak exercise ST segment to readable display
 def clean_slope(x):
     if x == 0:
-        return 'unsloping'
+        return 'upsloping'
     elif x == 1:
         return 'flat'
     else:
         return 'downsloping'
+
+# change Thalassemia attributes to readable display
 def clean_thal(x):
     if x == 0:
         return 'normal'
@@ -63,6 +72,8 @@ def clean_thal(x):
 @st.cache
 def load_data():
     data_frame = pd.read_csv('heart_cleveland_upload.csv')
+
+    # make dataframe readable for display
     data_frame = data_frame.rename({'trestbps': 'resting blood pressure'}, axis=1)
     data_frame = data_frame.rename({'restecg': 'resting electrocardiographic results'}, axis=1)
     data_frame = data_frame.rename({'thalach': 'maximum heart rate achieved'}, axis=1)
@@ -82,9 +93,12 @@ def load_data():
     data_frame['exercise induced angina'] = data_frame['exercise induced angina'].apply(clean_exang)
     data_frame['slope of the peak exercise ST segment'] = data_frame['slope of the peak exercise ST segment'].apply(clean_slope)
     data_frame['thalassemia'] = data_frame['thalassemia'].apply(clean_thal)
+
     return data_frame
 
 data_frame = load_data()
+
+# create separate dataframes for male and female
 data_frame_male = data_frame[data_frame['sex'] == 'Male']
 data_frame_female = data_frame[data_frame['sex'] == 'Female']
 
@@ -118,8 +132,7 @@ def show_explore_page():
 
     run = st.button('Run Query')
 
-
-
+    # show jointplot of cholesterol and resting blood pressure based on user input
     if run:
         if a <= b:
             data_frame2 = data_frame[(data_frame['age'] <= b) & (data_frame['age'] >= a)]
@@ -144,6 +157,7 @@ def show_explore_page():
 
     run1 = st.button('Display Data')
 
+    # show dataframe based on user query
     if run1:
         data_frame3 = data_frame
         for string in options:

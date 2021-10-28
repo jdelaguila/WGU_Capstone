@@ -4,7 +4,7 @@ from explore_page import show_explore_page
 import pyrebase
 from datetime import datetime
 
-
+# firebase configuration keys for username and password functionality
 firebaseConfig = {
   'apiKey': "AIzaSyA0-DQ1d41LoYiQDnDXf7H-nobdi6DJmzg",
   'authDomain': "streamlit-authorization.firebaseapp.com",
@@ -26,9 +26,9 @@ st.sidebar.title("Heart Disease Prediction Login")
 
 email = st.sidebar.text_input("Please enter your email:")
 password = st.sidebar.text_input("Please enter your password: ", type='password')
-
 login = st.sidebar.checkbox("Login")
 
+# attempt to login user
 if login:
     try:
         user = auth.sign_in_with_email_and_password(email, password)

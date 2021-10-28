@@ -5,7 +5,6 @@ import numpy as np
 
 
 def load_model():
-    # was 'saved_steps.pkl'
     with open('new_saved_steps.pkl', 'rb') as file:
         data = pickle.load(file)
     return data
@@ -19,6 +18,7 @@ def show_predict_page():
 
     st.write("""Enter test results for preliminary diagnosis:""")
 
+    # input widgets for diagnosis prediction
     age = st.number_input("Enter age: ", 0, 120)
     sex = st.selectbox("Select sex: ", ["Male", "Female"])
     chest_pain = st.selectbox("Select chest pain type: ", ["Typical Angina", "Atypical Angina",
@@ -34,11 +34,13 @@ def show_predict_page():
     exercise_induced_angina = st.selectbox("Exercise induced angina: ", ["Yes", "No"])
     old_peak = st.number_input(label="ST depression induced by exercise relative to rest",
                                min_value=0.0, max_value=10.0, step= 0.1, format="%.1f")
-    slope = st.selectbox("The slope of the peak exercise ST segment", ["Unsloping", "Flat", "Downsloping"])
+    slope = st.selectbox("The slope of the peak exercise ST segment", ["Upsloping", "Flat", "Downsloping"])
     thalassemia = st.selectbox("Thalassemia: ", ["Normal", "Fixed defect", "Reversable defect"])
     ca = st.number_input("Number of major vessels colored by fluoroscopy", 0 ,3)
 
     submit = st.button("Make Diagnosis")
+
+    # convert input data so can be interpreted by model
     if submit:
         if sex == "Female":
             sex_int = 0
@@ -66,7 +68,7 @@ def show_predict_page():
             exercise_induced_angina_int = 0
         else:
             exercise_induced_angina_int = 1
-        if slope == "Unsloping":
+        if slope == "Upsloping":
             slope_int = 0
         elif slope == "Flat":
             slope_int = 1
@@ -79,10 +81,13 @@ def show_predict_page():
         else:
             thalassemia_int = 2
 
+        # build user input
         X = np.array([[age, sex_int, chest_pain_int, resting_bp, cholesterol, fasting_blood_sugar_int, resting_ecg_int,
                        max_heart_rate, exercise_induced_angina_int, old_peak, slope_int, ca, thalassemia_int]])
-        # was decision_tree_loaded.predict(X)
+
         diagnosis = decision_tree_loaded.predict(X)
+
+        # display diagnosis
         if diagnosis[0] == 0:
             st.subheader("Diagnosis: No heart disease")
             st.write("roc_auc_score when model was trained: 0.7209821428571428")
