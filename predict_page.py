@@ -5,14 +5,14 @@ import numpy as np
 
 
 def load_model():
-    with open('saved_steps.pkl', 'rb') as file:
+    # was 'saved_steps.pkl'
+    with open('new_saved_steps.pkl', 'rb') as file:
         data = pickle.load(file)
     return data
 
 
 data = load_model()
-
-desicion_tree_loaded = data["model"]
+decision_tree_loaded = data["model"]
 
 def show_predict_page():
     st.title("Heart Disease Prediction")
@@ -36,7 +36,7 @@ def show_predict_page():
                                min_value=0.0, max_value=10.0, step= 0.1, format="%.1f")
     slope = st.selectbox("The slope of the peak exercise ST segment", ["Unsloping", "Flat", "Downsloping"])
     thalassemia = st.selectbox("Thalassemia: ", ["Normal", "Fixed defect", "Reversable defect"])
-    ca = st.number_input("Number of major vessels colored by fluoroscopy", 0 ,5)
+    ca = st.number_input("Number of major vessels colored by fluoroscopy", 0 ,3)
 
     submit = st.button("Make Diagnosis")
     if submit:
@@ -81,11 +81,16 @@ def show_predict_page():
 
         X = np.array([[age, sex_int, chest_pain_int, resting_bp, cholesterol, fasting_blood_sugar_int, resting_ecg_int,
                        max_heart_rate, exercise_induced_angina_int, old_peak, slope_int, ca, thalassemia_int]])
-        diagnosis = desicion_tree_loaded.predict(X)
+        # was decision_tree_loaded.predict(X)
+        diagnosis = decision_tree_loaded.predict(X)
         if diagnosis[0] == 0:
             st.subheader("Diagnosis: No heart disease")
+            st.write("roc_auc_score when model was trained: 0.7209821428571428")
+            st.write("accuracy_score when model was trained: 0.7166666666666667")
         else:
             st.subheader("Diagnosis: Heart disease")
+            st.write("roc_auc_score when model was trained: 0.7209821428571428")
+            st.write("accuracy_score when model was trained: 0.7166666666666667")
 
 
 
