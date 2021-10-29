@@ -108,10 +108,21 @@ def show_explore_page():
     st.write("""#### Complete Dataset""")
     st.dataframe(data_frame)
 
+    # Mean of all numerical attributes grouped by condition
+    st.write("""#### Mean of all numerical columns grouped by condition""")
+    data_frame_means = data_frame.groupby("condition")[["maximum heart rate achieved",
+                                                        "serum cholesterol (mg/dl)",
+                                                        "age","resting blood pressure"]].mean()
+    st.dataframe(data_frame_means)
+
+
     figure1 = sns.displot(data=data_frame, x="age", col='condition', kde=True)
     figure2 = sns.displot(data_frame_male, x="age", col='condition', color=(0.1, 0.2, 0.5), kde=True)
     figure3 = sns.displot(data_frame_female, x="age", col='condition', color=(0.5, 0.1, 0.1), kde=True)
-    figure4 = sns.jointplot(data=data_frame, x='serum cholesterol (mg/dl)', y='resting blood pressure', hue='condition')
+    figure4 = sns.jointplot(data=data_frame, x='maximum heart rate achieved', y='age', hue='condition')
+    figure6 = sns.pairplot(data_frame, hue='condition')
+
+
 
 
     st.write("""#### Distribution of heart disease by age""")
@@ -123,8 +134,13 @@ def show_explore_page():
     st.write("""\n#### Distribution of female heart disease by age""")
     st.pyplot(figure3)
 
-    st.write("""\n#### Joinplot of Cholesterol and Resting blood pressure for disease/no disease""")
+    st.write("""\n#### Maximum heart rate achieved by condition and distribution of age""")
     st.pyplot(figure4)
+
+    st.write("""\n#### Pairplot by condition""")
+    st.pyplot(figure6)
+
+
 
     st.write("""#### Interactive query: Show Jointplot of Cholesterol and Resting blood pressure between the ages 'a' and 'b'""")
     a = st.number_input("Enter a: ", 0, 120)
